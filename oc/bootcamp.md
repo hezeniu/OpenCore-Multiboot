@@ -26,7 +26,7 @@ To start we'll need the following:
 
 To install, it's as simple as grabbing [Brigadier](https://github.com/corpnewt/brigadier) and running either `Brigadier.bat` for Windows or `Brigadier.command` for macOS. If the SMBIOS you're currently using either has BootCamp issues or want to download for another SMBIOS, you can add `--  model{SMBIOS}` to the end:
 
-```
+```sh
 cd path/to/Brigadier
 brigadier.bat --model MacPro7,1
 ```
@@ -39,13 +39,13 @@ Next, you will find our bootcamp drivers under either:
 
 * Windows:
 
-```
+```sh
 path\to\Brigadier\BootCamp-{version}
 ```
 
 * macOS:
 
-```
+```sh
 path/to/Brigadier/BootCamp-{version}/WindowsSupport.dmg
 ```
 
@@ -88,7 +88,7 @@ Now to get onto troubleshooting:
 
 If Windows and OpenCore's boot loaders are on the same drive, you'll need to add a BlessOverride entry:
 
-```
+```sh
 Misc -> BlessOverride -> \EFI\Microsoft\Boot\bootmgfw.efi
 ```
 
@@ -138,6 +138,6 @@ This is due to OpenCore getting confused when trying to boot Windows and acciden
 
 For the latter, you'll need to run the following(replace `filename.msi` with the BootCamp installation msi):
 
-```
+```sh
 msiexec.exe /x "c:\filename.msi"
 ```

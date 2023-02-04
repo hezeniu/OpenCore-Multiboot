@@ -1,15 +1,16 @@
+
 # UEFI Systems
 
 Ever since UEFI, the disk default partition map format is GPT (GUID Partition Table), which added support for more than 2TB of disk size and more than 4 partitions that was the limit of MBR while still keeping a backward compatibility with MBR for legacy systems. If your computer (prebuilt) came with Windows 8 (2012 and later), then your disk is probably partitioned as GPT.
 
 Usually, 2012+ computers that came with Windows 8 would have a UEFI firmware (some OEMs released Windows 7 releases alongside those, so make sure yours has UEFI), and this is a newly spread firmware type (that was in development since the 2000s) and was already deployed on Apple computers ever since the intel switch (but their own heavily modified firmware, it's called EFI and not UEFI for the lack of universality). This new firmware has some new features like Secure Boot, help with faster booting, hardware passthrough, graphical interface with mouse support (and more). To know more about UEFI and Secure Boot check this writeup by Osy86 [here](https://osy.gitbook.io/hac-mini-guide/details/secure-boot). Basically, a UEFI boot goes something like this:
 
-- UEFI Firmware loads up
-- Loads its integrated drivers and services
-- Reads the boot menu entries and start loading the first boot entry
-  - If failed starts the next one
-- Loads the bootloader 
-  - OS is loaded after that.
+* UEFI Firmware loads up
+* Loads its integrated drivers and services
+* Reads the boot menu entries and start loading the first boot entry
+  * If failed starts the next one
+* Loads the bootloader
+  * OS is loaded after that.
 
 Usually, the said "bootloader" is contained somewhere in the disk, and that somewhere is called a **EFI Partition**. You can find this named different things like ESP (EFI System Partition), SYSTEM, EFI, BOOT and so on. This partition is **FAT32** formatted and flagged as **EF00** in MBR or **C12A7328-F81F-11D2-BA4B-00A0C93EC93B** GUID in GPT. This partition contains usually the EFI applications (like an OS bootloader) in it that are loaded at boot by the UEFI firmware (remember this as it is important for later for recovery).
 
@@ -49,8 +50,8 @@ Aside from Legacy hardware support (which is rare anyways nowadays), UEFI is the
 
 If your computer:
 
-- is from Ivy Bridge era (~2012) and later
-- has a Windows 8 Sticker
+* is from Ivy Bridge era (~2012) and later
+* has a Windows 8 Sticker
 
 Then it probably has **UEFI system**, that said, it doesn't mean older generation motherboards do not, however with Windows 8 release, Microsoft standardized the UEFI specs for OEMs to get their certification (usually if you go with brand names like ASUS, Lenovo, HP, Dell... you're good to go).
 
@@ -68,7 +69,7 @@ Check **BIOS Mode**, it will either say **UEFI** or **Legacy**. Note that this i
 
 ### Method 1
 
-On most Linux distributions, you can run 
+On most Linux distributions, you can run
 
 ```ls /sys/firmware/efi```
 
@@ -80,10 +81,10 @@ If the folder exists, then you're running in UEFI mode. (screenshot credit: Scoo
 
 You can also download and run `efibootmgr` (available on most distributions) and you will either:
 
-- Get boot entries variables
-  - Your system is running UEFI
-- or get an error message that EFI variables aren't supported
-  - Your system is running in Legacy mode
+* Get boot entries variables
+  * Your system is running UEFI
+* or get an error message that EFI variables aren't supported
+  * Your system is running in Legacy mode
 
 ---
 
@@ -91,8 +92,8 @@ You can also download and run `efibootmgr` (available on most distributions) and
 
 macOS requires some special treatment because Apple wants to (pampering their OS), and thus requires a set of rules to get it installed on any drive:
 
-- GPT formatted disk
-- EFI partition of at least 200MB
+* GPT formatted disk
+* EFI partition of at least 200MB
 
 With these two requirements in mind, you can theoretically just make them happen and you're good to go. If you understood what to do from these requirements and can do it on your own, you're good to go, if not, stay here to get more tips and tricks on how to properly fix this.
 
@@ -102,14 +103,14 @@ Next sections:
 
 Cases:
 
-- No OS installed on the machine:
-  - DB on same disk
-  - DB on different disks
-- Already installed OS or existing data in the drive
-  - Systems with native UEFI support: convert your legacy booting OS to a UEFI one
-    - Linux
-    - Windows
-    - Systems with only Legacy booting only option:
-      - DUET
+* No OS installed on the machine:
+  * DB on same disk
+  * DB on different disks
+* Already installed OS or existing data in the drive
+  * Systems with native UEFI support: convert your legacy booting OS to a UEFI one
+    * Linux
+    * Windows
+    * Systems with only Legacy booting only option:
+      * DUET
 
 Good luck, and ***BACKUP YOUR DATA***.

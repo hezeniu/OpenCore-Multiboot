@@ -1,10 +1,5 @@
 # Using Bootstrap.efi
 
-* [Preparation](#preperation)
-* [Troubleshooting](#troubleshooting)
-* [Quick UEFI Shell Reference Guide](#quick-uefi-shell-reference-guide)
-* [Adding OpenCore to your BIOS](#adding-opencore-to-your-bios)
-
 So with OpenCore 0.5.8 and newer, we get a neat little file inside our EFI/OC/Bootstrap folder called Bootstrap.efi. What this allows us to do is add OpenCore to our motherboard's boot menu and prevent issues where either Windows or Linux try to overwrite the BOOTx64.efi file which can happen during updates and completely delete any way of booting OpenCore.
 
 ## Preparation
@@ -38,7 +33,7 @@ This is mainly as a mini-guide in case BootProtect doesn't work or you'd like to
 
 For those wanting to verify that the entry was applied in OpenCore, enabling logging(see [OpenCore Debugging](/troubleshooting/debug.md)) and check for entries similar to these:
 
-```
+```sh
 OCB: Have existing option 1, valid 1
 OCB: Boot order has first option as the default option
 ```
