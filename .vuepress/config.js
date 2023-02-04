@@ -3,7 +3,7 @@ const {
 } = require('../package')
 
 module.exports = {
-    title: 'OpenCore Multiboot',
+    title: 'OpenCore 多引导',
     head: [
         ['meta', {
             name: 'theme-color',
@@ -38,48 +38,45 @@ module.exports = {
 
     themeConfig: {
         lastUpdated: true,
-        repo: 'https://github.com/dortania/OpenCore-Multiboot',
+        repo: 'https://github.com/sumingyd/OpenCore-Multiboot',
 		editLinks: true,
-		editLinkText: 'Help us improve this page!',
+		editLinkText: '帮助我们改进此页!',
         logo: 'homepage.png',
         nav: [{
-            text: 'Dortania Guides',
+            text: '指南菜单',
             ariaLabel: 'Language Menu',
-            items: [{
-                text: 'Home Site',
-                link: 'https://dortania.github.io/'
+            items: [
+            {
+                text: 'OpenCore安装指南',
+                link: 'https://sumingyd.github.io/OpenCore-Install-Guide/'
             },
             {
-                text: 'OpenCore Install Guide',
-                link: 'https://dortania.github.io/OpenCore-Install-Guide/'
+                text: 'OpenCore安装后',
+                link: 'https://sumingyd.github.io/OpenCore-Post-Install/'
             },
             {
-                text: 'OpenCore Post-Install',
-                link: 'https://dortania.github.io/OpenCore-Post-Install/'
+                text: '无线购买指南',
+                link: 'https://sumingyd.github.io/Wireless-Buyers-Guide/'
             },
             {
-                text: 'Wireless Buyers Guide',
-                link: 'https://dortania.github.io/Wireless-Buyers-Guide/'
+                text: '显卡购买指南',
+                link: 'https://sumingyd.github.io/GPU-Buyers-Guide/'
             },
             {
-                text: 'GPU Buyers Guide',
-                link: 'https://dortania.github.io/GPU-Buyers-Guide/'
-            },
-            {
-                text: 'Anti Buyers Guide',
-                link: 'https://dortania.github.io/Anti-Hackintosh-Buyers-Guide/'
+                text: '避免购买指南',
+                link: 'https://sumingyd.github.io/Anti-Hackintosh-Buyers-Guide/'
             }
             ]
         },
             /*
               {
                 text: 'Github',
-                link: 'https://github.com/dortania/OpenCore-Install-Guide'
+                link: 'https://github.com/sumingyd/OpenCore-Install-Guide'
               }
             */
         ],
         sidebar: [{
-	            title: 'Multiboot with OpenCore',
+	            title: '多引导与OpenCore',
                 collapsable: false,
                 sidebarDepth: 0,
                 children: [
@@ -87,7 +84,7 @@ module.exports = {
                 ]
 	        },
 		{
-            title: 'For experienced users who already dealt with multibooting',
+            title: '适用于已经处理过多引导的有经验的用户',
             collapsable: false,
             sidebarDepth: 1,
             children: [
@@ -96,7 +93,7 @@ module.exports = {
 
         },
 		{
-            title: 'Introduction to multi-booting',
+            title: '多引导介绍',
             collapsable: false,
             sidebarDepth: 1,
             children: [
@@ -107,7 +104,7 @@ module.exports = {
 
         },
 		{
-            title: 'Multibooting Situations',
+            title: '多引导情况',
             collapsable: false,
             sidebarDepth: 1,
             children: [
@@ -133,15 +130,15 @@ module.exports = {
 
         },
 		{
-            title: 'OpenCore configuration',
+            title: 'OpenCore配置',
             collapsable: false,
             sidebarDepth: 1,
             children: [
                 ['/oc/win', 'For Windows booting'],
 				['/oc/linux', 'For Linux booting'],
 				['/oc/duet', 'Installing OpenCore on a legacy system'],
-				['https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap.html', 'Using LauncherOption'],
-				['https://dortania.github.io/OpenCore-Post-Install/multiboot/bootcamp.html', 'BootCamp installation'],
+				['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootstrap.html', 'Using LauncherOption'],
+				['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootcamp.html', 'BootCamp installation'],
             ]
 
         },
