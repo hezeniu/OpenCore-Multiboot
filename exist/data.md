@@ -124,7 +124,7 @@ We will be using `gdisk` ran on any linux distribution, I strongly NOT recommend
   ***************************************************************
   
   
-  Command (? for help): 
+  Command (? for help):
   ```
 
 * Type `w` and press Enter/Return
@@ -178,7 +178,7 @@ With that said, we still need to determine if it's required or not:
     ```sh
     Command (? for help): p
     Disk /dev/<identifier>: NUMBER sectors, SIZE GiB
-    Model: SOME NAME     
+    Model: SOME NAME
     Sector size (logical/physical): 512/512 bytes
     Disk identifier (GUID): SOME GUID
     Partition table holds up to 128 entries
@@ -186,11 +186,11 @@ With that said, we still need to determine if it's required or not:
     First usable sector is 34, last usable sector is 976773134
     Partitions will be aligned on 8-sector boundaries
     Total free space is 10261 sectors (5.0 MiB)
-    
+
     Number  Start (sector)    End (sector)  Size       Code  Name
        1            2048          800767   390.0 MiB   EF00  EFI          // We're interested in this
        2          800808       213967975   101.6 GiB   AF0A  
-       ... // Other partitions 
+       ... // Other partitions
     ```
 
     * You'll find a partition with code `EF00` meaning it's marked as an EFI System Partition
@@ -205,7 +205,7 @@ With that said, we still need to determine if it's required or not:
     ```sh
     Command (? for help): p
     Disk /dev/<identifier>: NUMBER sectors, SIZE GiB
-    Model: SOME NAME     
+    Model: SOME NAME
     Sector size (logical/physical): 512/4096 bytes
     Disk identifier (GUID): SOME GUID
     Partition table holds up to 128 entries
@@ -213,10 +213,10 @@ With that said, we still need to determine if it's required or not:
     First usable sector is 34, last usable sector is NUMBER
     Partitions will be aligned on 2048-sector boundaries
     Total free space is 2669 sectors (1.3 MiB)
-    
+
     Number  Start (sector)    End (sector)  Size       Code  Name
        1            2048       250068991   119.2 GiB   0700  peepee       // a partition
-       ... // Other partitions that are not EFIs 
+       ... // Other partitions that are not EFIs
     ```
 
     * There are no `EF00` partitions meaning we need to make one
@@ -270,7 +270,7 @@ We'll have to make one, and the OSes that we will use will be either Windows or 
 
 We'll be using a disk managing software named `Minitool Partition Wizard`, ngl, it does look shady af and kind of like malware (and won't be surprised if it is). There are other alternatives like `Easeus Partition Master` (that suspiciously look like MPW 🤔) and `AOMEI Partition Assistant` (that also looks like the other two ***🤔 intensifies***), and many more but these are the most popular windows disk managers.
 
-##### But where is muh GpArTeD?
+##### But where is muh GpArTeD
 
 The reason why I'm not recommending Gparted with NTFS partitions is that it might corrupt the partition easier than when Windows deals with it. I personally didn't have to deal much with corrupt NTFS partitions (I did once or twice) and Windows will surely fix them, but a lot of users reported unrecoverable partitions or data from using Gparted, not blaming Gparted, but using Windows with its own FS is safer than hoping ntfs-3g doesn't fuck up, that being said though, I'll post a Gparted guide below under `Linux` section, and if you already dealt with Gparted, I think you might know what to do.
 

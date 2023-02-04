@@ -50,10 +50,10 @@ Some common Linux bootloader paths:
       ```shell
       $ lsblk
       NAME         MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-      ... 
-      sda            8:0    0 223.6G  0 disk 
+      ...
+      sda            8:0    0 223.6G  0 disk
       ├─sda1         8:1    0   200M  0 part /boot/efi
-      ├─sda2         8:2    0 116.3G  0 part 
+      ├─sda2         8:2    0 116.3G  0 part
       └─sda3         8:3    0   107G  0 part /
       ...
       ```
@@ -114,10 +114,10 @@ We first need to determine your root partition and its UUID/PARTUUID, this infor
   ```shell
   $ lsblk
   NAME         MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-  ... 
-  sda            8:0    0 223.6G  0 disk 
+  ...
+  sda            8:0    0 223.6G  0 disk
   ├─sda1         8:1    0   200M  0 part /boot/efi
-  ├─sda2         8:2    0 116.3G  0 part 
+  ├─sda2         8:2    0 116.3G  0 part
   └─sda3         8:3    0   107G  0 part /
   ...
   ```
