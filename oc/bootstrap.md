@@ -1,20 +1,20 @@
-# Using Bootstrap.efi
+# 使用Bootstrap.efi
 
-So with OpenCore 0.5.8 and newer, we get a neat little file inside our EFI/OC/Bootstrap folder called Bootstrap.efi. What this allows us to do is add OpenCore to our motherboard's boot menu and prevent issues where either Windows or Linux try to overwrite the BOOTx64.efi file which can happen during updates and completely delete any way of booting OpenCore.
+因此，在OpenCore 0.5.8及更新版本中，我们在EFI/OC/Bootstrap文件夹中获得了一个整洁的小文件，名为Bootstrap. EFI。这允许我们做的是将OpenCore添加到我们主板的引导菜单，并防止Windows或Linux试图覆盖BOOTx64.efi文件的问题，这可能在更新期间发生，并完全删除引导OpenCore的任何方式。
 
-## Preparation
+## 准备
 
-So to start we're gonna need the following:
+首先，我们需要以下东西:
 
-* [OpenCore 0.5.8 or newer](https://github.com/acidanthera/OpenCorePkg/releases)
-  * Verify you have EFI/OC/Bootstrap/Bootstrap.efi
-* config.plist settings:
+* [OpenCore 0.5.8 或更新版本](https://github.com/acidanthera/OpenCorePkg/releases)
+  * 确认你已经安装了EFI/OC/Bootstrap/Bootstrap. EFI
+* config.plist 设置:
   * Misc -> Security -> BootProtect -> Bootstrap
   * UEFI -> Quirks -> RequestBootVarRouting -> True
 * [OpenShell](https://github.com/acidanthera/OpenCorePkg/releases)
-  * Bundled with OpenCore
-  * Remember to add this to both EFI/OC/Tools and config.plist -> Misc -> Tools
-  * This is mainly for troubleshooting
+  * 与OpenCore绑定
+  * 请记住将此添加到EFI/OC/Tools和config.plist -> Misc -> Tools
+  * 主要用于故障排除
   
 ## Booting
 
