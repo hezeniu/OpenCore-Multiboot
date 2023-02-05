@@ -1,54 +1,54 @@
-# Dualbooting with Windows
+# Windows下的双启动
 
-* MBR based Windows installs **ARE NOT SUPPORTED** by OpenCore at this time, you will need to convert it to GPT.
+* OpenCore目前**不支持**基于MBR的Windows安装，你需要将其转换为GPT。
 
-#### Solution 1: If Windows is not picked up automagically, add the following to your config.plist
+#### 解决方案1:如果不能自动拾取Windows，请将以下内容添加到config.plist中
 
 ```sh
 Misc -> BlessOverride -> \EFI\Microsoft\Boot\bootmgfw.efi
 ```
 
-* **Note**: As of OpenCore 0.5.9, this no longer needs to be specified. OpenCore should pick up on this entry automatically
+* **注意**:从OpenCore 0.5.9开始，不再需要指定该参数。OpenCore应该会自动接收这个条目
 
 ![](../images/win-md/blessoverride.png)
 
-#### Solution 2: To make Windows get picked up, boot to recovery mode from within Windows
+#### 解决方案2:要使Windows被拾取，请从Windows内部启动到恢复模式
 
-* **make sure you boot windows from OpenCore**
-  * after loading OpenCore, press space > OpenShell (make sure you have it in Tools and in the config)
-  * run `map -r -b`
-  * look for your EFI drive (usually it's in the first lines, watch out if you're a multidisk user, there might be many EFIs)
-  * run `FSX:\EFI\Microsoft\Boot\bootmgfw.efi` where X is the number of the EFI partition with windows bootloader
-* **make sure that RequestBootVarRouting is set to True**
-* open CMD/PS with admin rights
-* run `shutdown /r /o /t 0`
-  * this will reboot your windows system immediately to Advanced Boot Menu menu
-* select Troubleshoot > Command Prompt
-* it will reboot to WinRE and you'll get to the Command Prompt
-* once in there
-  * run `diskpart`
-  * once loaded, send `list vol`
-  * look for your Windows drive letter
-    * it may not have the `C` lettering, but make sure you check the size and other indicatives that points to it
-    * if you cannot, just write down the mounted letters with (NTFS) filesystem then explore them one by one to check if it's your windows install
-  * look for your EFI partition
-    * it should say `hidden` or `system` and is usually 100-200MB (some OEM installs make it bigger as much as 500MB)
-      * send `sel vol X` where X is the EFI partition number
-    * if you're in doubt
-      * send `list disk`
-      * identify your windows disk
-      * send `sel disk X` where X is the disk where Windows is installed on
-      * send `list part`
-      * check the partitions, usually the EFI should have 100-200MB (some OEM installs make it bigger as much as 500MB)
-      * send `sel part X` where X is the EFI partition number
-    * either way, send `assign letter=S`
-      * S can be anything other than A/B/Y/X and any letter already assigned in the listing before it
-  * send `exit` to close diskpart and return to the command prompt
-  * run `bcdboot X:\Windows /s S: /f UEFI`
-    * [bcdboot](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/bcdboot-command-line-options-techref-di) is a utility that installs Windows bootloader in either your EFI or root system partition (of choice)
-    * `X:\Windows` is a path to the Windows installation folder, where X is the mount letter of the Windows partition
-    * `/s S:` is the destination disk that will receive the bootloader, in our case, it's the EFI partition
-    * `/f UEFI` to specify the type the bootloader should be (UEFI Bootloader)
-    * This will copy a new bootmgfw.efi file as well as add a new NVRAM Boot entry which hopefully will now appear on OpenCore boot menu.
-* if everything ran without any errors, type `exit` and it should return you back to the Advanced Boot Menu (or reboot)
-* reboot and check if Windows boot entry has been added
+* **确保你从OpenCore启动windows**
+  * 加载OpenCore后，按空格> OpenShell(确保在工具和配置中有它)
+  * 运行 `map -r -b`
+  * 查找您的EFI驱动器(通常在第一行，如果您是多盘用户，请注意，可能有许多EFI驱动器)
+  * 运行 `FSX:\EFI\Microsoft\Boot\bootmgfw.efi` 其中X是带有windows引导加载程序的efi分区的编号
+* **确保将RequestBootVarRouting设置为True**
+* 打开具有管理员权限的CMD/PS
+* 运行 `shutdown /r /o /t 0`
+  * 这将重新启动您的windows系统立即进入高级启动菜单
+* 选择“故障排除>命令提示符”
+* 它将重新启动到WinRE，你将进入命令提示符
+* 一旦进入
+  * 运行 `diskpart`
+  * 加载完成后，发送 `list vol`
+  * 寻找您的Windows驱动器号
+    * 它可能没有`C`字母，但请确保你检查了大小和其他指向它的指示
+    * 如果你不能，只要写下挂载的字母与(NTFS)文件系统，然后逐一探索它们，以检查它是否是你的windows安装
+  * 查找您的EFI分区
+    * 它应该显示为`hidden`或`system`，通常为100-200MB(有些OEM安装会将其放大到500MB)
+      * 发送`sel vol X`，其中X是EFI分区号
+    * 如果你有疑问
+      * 发送 `list disk`
+      * 识别你的Windows磁盘
+      * 发送`sel disk X`，其中X是安装Windows的磁盘
+      * 发送 `list part`
+      * 检查分区，通常EFI应该有100-200MB(有些OEM安装会把它放大到500MB)
+      * 发送`sel part X`，其中X是EFI分区号
+    * 无论哪种方式，发送`assign letter=S`
+      * S可以是A/B/Y/X之外的任何值，也可以是在它之前的列表中已经赋值的任何字母
+  * 发送`exit`命令关闭diskpart并返回到命令提示符
+  * 运行 `bcdboot X:\Windows /s S: /f UEFI`
+    * [bcdboot](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/bcdboot-command-line-options-techref-di) 是一个在EFI或根系统分区(任选)安装Windows引导加载程序的实用程序
+    * `X:\Windows`是Windows安装文件夹的路径，其中X是Windows分区的挂载字母
+    * `/s S:`是接收引导加载程序的目标磁盘，在我们的例子中，它是EFI分区
+    * `/f UEFI`指定引导加载器的类型(UEFI引导加载器)
+    * 这将复制一个新的boottmgfw.efi文件，并添加一个新的NVRAM启动项，希望现在会出现在OpenCore启动菜单上。
+* 如果一切都运行没有任何错误，键入`exit`，它应该返回到高级引导菜单(或重启)
+* 重新启动并检查是否添加了Windows引导项
