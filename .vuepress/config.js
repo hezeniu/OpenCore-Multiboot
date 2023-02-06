@@ -46,7 +46,8 @@ module.exports = {
         lastUpdated: true,
         lastUpdated: '上次更新',
         logo: 'homepage.png',
-        nav: [{
+        nav: [
+            {
             text: '指南菜单',
             items: [
                 {
@@ -78,13 +79,8 @@ module.exports = {
                     link: 'https://sumingyd.github.io/Anti-Hackintosh-Buyers-Guide/'
                 },
             ]
-        },
-            /*
-              {
-                text: 'Github',
-                link: 'https://github.com/sumingyd/OpenCore-Install-Guide'
-              }
-            */
+            },
+            { text: 'QQ群', link: 'https://qm.qq.com/cgi-bin/qm/qr?k=rpbw958T9WK6wU03Wxr0d9UXyx3wMwqb&jump_from=webapi&authKey=znX2XCz7Xsiwyy1ZX/JE0TnTnwZg/0JGWtfP20oaitoSLtdxUeSqG9go3smUIOKT' },
         ],
         sidebar: [{
 	            title: '多重引导与OpenCore',
