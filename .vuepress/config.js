@@ -37,35 +37,47 @@ module.exports = {
     ],
 
     themeConfig: {
-        lastUpdated: true,
         repo: 'https://github.com/sumingyd/OpenCore-Multiboot',
-		editLinks: true,
-		editLinkText: '帮助我们改进此页!',
+        label: '简体中文',
+        selectText: '选择语言',
+        ariaLabel: '选择语言',
+        editLinks: true,
+        editLinkText: '在 GitHub 上编辑此页',
+        lastUpdated: true,
+        lastUpdated: '上次更新',
         logo: 'homepage.png',
         nav: [{
             text: '指南菜单',
             ariaLabel: 'Language Menu',
             items: [
-            {
-                text: 'OpenCore安装指南',
-                link: 'https://sumingyd.github.io/OpenCore-Install-Guide/'
-            },
-            {
-                text: 'OpenCore安装后',
-                link: 'https://sumingyd.github.io/OpenCore-Post-Install/'
-            },
-            {
-                text: '无线购买指南',
-                link: 'https://sumingyd.github.io/Wireless-Buyers-Guide/'
-            },
-            {
-                text: '显卡购买指南',
-                link: 'https://sumingyd.github.io/GPU-Buyers-Guide/'
-            },
-            {
-                text: '避免购买指南',
-                link: 'https://sumingyd.github.io/Anti-Hackintosh-Buyers-Guide/'
-            }
+                {
+                    text: 'OpenCore安装',
+                    link: 'https://sumingyd.github.io/OpenCore-Install-Guide/'
+                },
+                {
+                    text: 'OpenCore安装后',
+                    link: 'https://sumingyd.github.io/OpenCore-Post-Install/'
+                },
+                {
+                    text: 'OpenCore多重引导',
+                    link: 'https://sumingyd.github.io/OpenCore-Multiboot/'
+                },
+                {
+                    text: '开始使用ACPI',
+                    link: 'https://sumingyd.github.io/Getting-Started-With-ACPI/'
+                },
+                {
+                    text: '无线购买指南',
+                    link: 'https://sumingyd.github.io/Wireless-Buyers-Guide/'
+                },
+                {
+                    text: '显卡购买指南',
+                    link: 'https://sumingyd.github.io/GPU-Buyers-Guide/'
+                },
+                {
+                    text: '避免购买指南',
+                    link: 'https://sumingyd.github.io/Anti-Hackintosh-Buyers-Guide/'
+                },
             ]
         },
             /*
@@ -76,7 +88,7 @@ module.exports = {
             */
         ],
         sidebar: [{
-	            title: '多引导与OpenCore',
+	            title: '多重引导与OpenCore',
                 collapsable: false,
                 sidebarDepth: 0,
                 children: [
@@ -88,42 +100,42 @@ module.exports = {
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                ['QUICK', 'Quick! I know what do, just tell me already HOW'],
+                ['QUICK', '快!我知道该做什么，告诉我怎么做就好'],
             ]
 
         },
 		{
-            title: '多引导介绍',
+            title: '多重引导介绍',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                ['/Intro/Def', 'What is it?'],
-				['/Intro/Booting-part', 'UEFI? Legacy? CSM? What?'],
-				['/Intro/disc', 'Disclaimer'],
+                ['/Intro/Def', '它是什么?'],
+				['/Intro/Booting-part', 'UEFI? Legacy? CSM? 是什么?'],
+				['/Intro/disc', '免责声明'],
             ]
 
         },
 		{
-            title: '多引导情况',
+            title: '多重引导情况',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                ['/empty/', 'Multibooting Situations'],
+                ['/empty/', '多重引导情况'],
 				{
             	collapsable: false,
             	sidebarDepth: 1,
 	            children: [
-	                ['/empty/samedisk', 'One disk - multiple OSes'],
-					['/empty/diffdisk', 'Multiple disks - multiple OSes'],
+	                ['/empty/samedisk', '一个磁盘-多个操作系统'],
+					['/empty/diffdisk', '多个磁盘—多个操作系统'],
 	            ]
 				},
-				['/exist/', 'Existing Filled Disk'],
+				['/exist/', '已充满磁盘'],
 				{
             	collapsable: false,
             	sidebarDepth: 1,
 	            children: [
-	                ['/exist/data', 'On a filled non-OS related disk (Data disk)'],
-					['/exist/os', 'On a filled OS related disk (Windows/Linux)'],
+	                ['/exist/data', '在已填满的非操作系统相关磁盘(数据磁盘)上'],
+					['/exist/os', '在一个充满操作系统相关的磁盘上(Windows/Linux)'],
 	            ]
 				},
             ]
@@ -134,11 +146,11 @@ module.exports = {
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                ['/oc/win', 'For Windows booting'],
-				['/oc/linux', 'For Linux booting'],
-				['/oc/duet', 'Installing OpenCore on a legacy system'],
-				['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootstrap.html', 'Using LauncherOption'],
-				['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootcamp.html', 'BootCamp installation'],
+                ['/oc/win', '关于Windows引导'],
+				['/oc/linux', '关于Linux启动'],
+				['/oc/duet', '在legacy系统上安装OpenCore'],
+				['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootstrap.html', '使用启动器选项'],
+				['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootcamp.html', 'BootCamp安装'],
             ]
 
         },
