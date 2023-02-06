@@ -48,7 +48,6 @@ module.exports = {
         logo: 'homepage.png',
         nav: [{
             text: '指南菜单',
-            ariaLabel: 'Language Menu',
             items: [
                 {
                     text: 'OpenCore安装',
