@@ -3,7 +3,7 @@ const {
 } = require('../package')
 
 module.exports = {
-    title: 'OpenCore 多引导',
+    title: 'OpenCore 多重引导',
     head: [
         ['meta', {
             name: 'theme-color',
