@@ -1,7 +1,7 @@
-# Dualbooting on filled disks
+# 在充满数据的磁盘上进行双启动
 
-This section will explain how to deal with disks with data already in use in them for dual booting. This may seem difficult, but it's quite simple, just remember to **backup all of your data** before starting. This section has destructive and non-destructive methods of manipulating partitions, disks and data.
+本节将解释如何处理已经在使用中的数据的磁盘，以实现双重启动。这看起来可能很难，但其实很简单，只要记得在开始之前**备份所有数据**。本节介绍了操作分区、磁盘和数据的破坏性和非破坏性方法。
 
-This section is meant for those who have disks with an OS installed on it already, or just a secondary disk with partitions other than OSes. To be honest, either way, they both follow the same idea and procedures, but just to help with some special cases, it has been decided to split them into two different categories.
+本节适用于那些已经在磁盘上安装了操作系统的用户，或者只是在辅助磁盘上安装了操作系统以外的分区的用户。老实说，无论哪种方式，它们都遵循相同的想法和程序，但为了帮助处理一些特殊情况，我们决定将它们分为两个不同的类别。
 
-Let's get started...
+让我们开始吧……

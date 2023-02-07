@@ -1,51 +1,51 @@
 
-# On a filled non-OS related disk (Data disk)
+# 在一个已填充的非操作系统相关磁盘(数据磁盘)上
 
-This is quite easy, basically we'll just make some space for an EFI (if it doesn't exist already) and some for our macOS system.
+这很简单，基本上我们只需要为EFI(如果它还不存在的话)和我们的macOS系统腾出一些空间。
 
-## Precautions
+## 预防措施
 
-* BACKUP YOUR DATA
-* If possible, disconnect or disable any other disk/drive in your system, as it may interfere with our process. (keep only the target disk and/or the boot OS disk where we will do the operations from)
-* The drive isn't corrupted or have bad sectors
-* Your system is on pure UEFI setup, no CSM/Legacy OS installed
-* Stable power input
+* 备份您的数据
+* 如果可能的话，断开或禁用系统中的任何其他磁盘/驱动器，因为它可能会干扰我们的进程。(只保留目标磁盘和/或引导操作系统磁盘，我们将从那里进行操作)
+* 驱动器没有损坏或坏扇区
+* 您的系统是纯UEFI设置，没有安装CSM/Legacy操作系统
+* 电源输入稳定
 
-## Situation this applies for
+## 这种情况适用
 
-* A disk with data that is not related to windows or linux or macOS
-* A disk that used to be for an OS but now it's just data
+* 一个包含与windows、linux或macOS无关数据的磁盘
+* 一个曾经用于操作系统的磁盘，现在只是数据
 
 ---
 
-To start, we need to know what kind of partitioning scheme we're using, most new drives that are <1TB are usually MBR formatted (some 1TB drives still do) while anything bigger in size is GPT partitioned. As we saw before, macOS **requires** GPT and can't do without it.
+首先，我们需要知道我们使用的是哪种分区方案，大多数小于1TB的新驱动器通常是MBR格式化的(一些1TB的驱动器仍然是这样)，而更大的驱动器是GPT分区的。正如我们之前看到的，macOS **需要** GPT并且不能没有它。
 
-Note: we do not speak of the MBR patch, that's a bad idea and really should not exist anymore since it doesn't make any sense when most 2006+ computers can easily boot a GPT drive without much issues.
+注意:我们不谈论MBR补丁，这是一个坏主意，真的不应该存在，因为它没有任何意义，大多数2006年以上的计算机可以很容易地引导一个GPT驱动器没有太多问题。
 
-## Checking your disk partitioning scheme
+## 检查磁盘分区方案
 
-#### In Windows
+#### Windows系统
 
-* Open Disk Manager
-* Right click on the destination drive > *Properties*
+* 打开磁盘管理器
+* 右键单击目标驱动器> *属性*
   ![img](../images/ex-data/mbvm.png)
-* Go to *Volumes* and check *Partition Style*
-  * **MBR** drives will show:
+* 进入“卷”，选中“分区样式”
+  * **MBR**驱动器将显示:
 
     ![image-20200825010342403](../images/ex-data/mbr_disk.png)
-  * **GPT** drives will show:
+  * **GPT**驱动器将显示:
 
     ![image-20200825010434237](../images/ex-data/gpt_disk.png)
 
-#### In Linux
+#### Linux系统
 
-* Download and install `gdisk` if it's not already installed
+* 如果还没有安装`gdisk`，请下载并安装
 
-* Run `lsblk` to list your disks and partitions and check the identifiers (eg: `/dev/sda` or `/dev/nvme0n1`) of your destination disk with data
+* 运行`lsblk`来列出你的磁盘和分区，并检查目标磁盘的标识符(例如:`/dev/sda`或`/dev/nvme0n1`)
 
-* Run `sudo gdisk -l <disk_identifier>` (eg: `sudo gdisk -l /dev/sda`)
+* 运行`sudo gdisk -l <disk_identifier>`(例如:`sudo gdisk -l /dev/sda`)
 
-  * **MBR** disks will output:
+  * **MBR**磁盘将输出:
 
     ```sh
     Partition table scan:
@@ -55,7 +55,7 @@ Note: we do not speak of the MBR patch, that's a bad idea and really should not 
       GPT: not present
     ```
 
-  * **GPT** disks will output:
+  * **GPT**磁盘将输出:
 
     ```sh
     Partition table scan:
@@ -65,49 +65,49 @@ Note: we do not speak of the MBR patch, that's a bad idea and really should not 
       GPT: present
     ```
 
-#### In macOS
+#### macOS系统
 
-* Run `diskutil list`
+* 运行 `diskutil list`
 
-* Check the destination drive
+* 检查目标驱动器
 
-  * **MBR** disks will have:
+  * **MBR** 磁盘将具有:
 
     ```sh
        #:                       TYPE NAME                    SIZE       IDENTIFIER
        0:     FDisk_partition_scheme                        *SIZE GB   diskX
     ```
 
-  * **GPT** disks will have:
+  * **GPT** 磁盘将具有:
 
     ```sh
        #:                       TYPE NAME                    SIZE       IDENTIFIER
        0:      GUID_partition_scheme                        *SIZE GB   diskX
     ```
 
-## Converting MBR to GPT
+## 转换MBR到GPT
 
-**Note**: if your drive is **already GPT**, then **skip this section**.
+**注意**:如果您的驱动器**已经是GPT**，则**跳过此部分**。
 
-#### Destructive Conversion
+#### 破坏性转换
 
-This method will destroy all your data on your disk, making you a clean slate to work with. **Only use this if the data in the disk is not important or backed up already! YOUR DATA WILL BE GONE WITH THIS METHOD.**
+这个方法会销毁磁盘上的所有数据，让你重新开始工作。**仅当磁盘中的数据不重要或已经备份时才使用它!使用此方法，您的数据将被删除**
 
-You can use any partitioning tool of your choice and destroy the data, OR you can just boot macOS installer that you made with the OpenCore Dortania Guide and select the disk and format it. You can check [Dualbooting on the same disk](../empty/samedisk.md) section for more information. You're not required to follow the rest of this section.
+你可以使用任何你选择的分区工具销毁数据，或者你可以启动你用OpenCore安装指南制作的macOS安装程序，选择磁盘并格式化它。您可以查看[在同一磁盘上的双启动](../empty/samedisk.md) 部分以获取更多信息。你不需要继续阅读本节的其余部分。
 
-#### Non-Destructive Conversion
+#### 无损转换
 
-This method has higher chances of keeping your data intact, **however this does NOT mean you can ignore backing up your data. BACKUP YOUR DATA!**
+这种方法有更高的机会保持数据完整，**但这并不意味着你可以忽略备份数据。备份您的数据!**
 
-We will be using `gdisk` ran on any linux distribution, I strongly NOT recommend using Windows or macOS gdisk to perform this operation as it may break seeing how Windows and macOS disk handling differs from Linux. You can use a USB distribution like `gparted` (lightweight iso/usb image) to do the manipulations or any distribution disk in hand (arch, Ubuntu, Fedora...).
+我们将使用在任何linux发行版上运行的`gdisk`，我强烈不建议使用Windows或macOS gdisk执行此操作，因为它可能会破坏了解Windows和macOS磁盘处理与linux的区别。你可以使用像`gparted`这样的USB发行版(轻量级iso/ USB镜像)来操作，也可以使用手头的任何发行版磁盘(arch、Ubuntu、Fedora…)。
 
-* Download/Install `gdisk` following you distribution
+* 根据发行版下载/安装`gdisk`
 
-* Run `lsblk` to check for the destination drive identifiers
+* 运行`lsblk`来检查目标驱动器标识符
 
-* Run `sudo gdisk <identifier>` (eg: `sudo gdisk /dev/sda`)
+* 运行`sudo gdisk <identifier>`(例如:`sudo gdisk /dev/sda`)
 
-* If your disk is MBR, you'll be greeted with:
+* 如果你的磁盘是MBR，你会看到:
 
   ```sh
   Partition table scan:
@@ -127,53 +127,53 @@ We will be using `gdisk` ran on any linux distribution, I strongly NOT recommend
   Command (? for help):
   ```
 
-* Type `w` and press Enter/Return
+* 输入`w`并按Enter/Return
 
-* Press `y` to confirm
+* 按`y`进行确认
 
-* You're done.
+* 你就完成了。
 
-For those who want to other way around (from GPT to MBR) follow this [answer](https://superuser.com/questions/1250895/converting-between-gpt-and-mbr-hard-drive-without-losing-data).
+对于那些想要其他方式(从GPT到MBR)的人，请遵循这个[答案](https://superuser.com/questions/1250895/converting-between-gpt-and-mbr-hard-drive-without-losing-data).
 
-#### Verification
+#### 验证
 
-Once your drive is converted, check again following the instruction above. You may want to reboot your computer before verifying.
+一旦你的驱动器被转换，按照上面的指示再次检查。您可能希望在验证之前重新启动计算机。
 
-## Partitioning the Disk
+## 分区磁盘
 
-Once you converted (or already formated) your disk is GPT, it is time to repartition it for macOS partition and the EFI partition if there isn't.
+一旦您转换(或已经格式化)您的磁盘为GPT，是时候为macOS分区和EFI分区重新分区了(如果没有的话)。
 
-### Checking the disk existing partitions
+### 检查磁盘现有分区
 
-Just because the disk is now GPT partitioned, it doesn't mean that macOS will accept it, macOS's HFS Plus (Mac OS Journaled File System) or APFS won't accept formatting it and will return an error with `MediaKit reports not enough space on device for requested operation`, this is because either there is no EFI partition or it's not large enough. Either way, if you're just using a disk with non-OS data, chances are you do not have that partition and we will have to make one.
+只是因为磁盘现在是GPT分区，这并不意味着macOS将接受它，macOS的HFS Plus (Mac OS日志文件系统)或APFS将不接受格式化它，并将返回一个错误“MediaKit报告设备上没有足够的空间用于所请求的操作”，这是因为要么没有EFI分区，要么它不够大。无论哪种方式，如果您只是使用带有非操作系统数据的磁盘，很可能您没有该分区，我们将不得不创建一个。
 
-With that said, we still need to determine if it's required or not:
+话虽如此，我们仍然需要确定是否需要:
 
-#### In  Windows
+#### Windows 系统
 
-* Open Disk Manager
-* Check your destination disk
-  * In case your disk already contains an EFI partition: (usually if your disk was already GPT or formatted before)
+* 打开磁盘管理器
+* 检查目标磁盘
+  * 如果您的磁盘已经包含一个EFI分区:(通常如果您的磁盘之前已经被GPT或格式化过)
     ![img](../images/ex-data/gpt_efi.png)
-    * You'll see a description with `(EFI SYSTEM PARTITION)`
-    * The size of this partition is usually between 100MB and 500MB (any more and it's a waste of storage space)
-      * In case the size of it is <200MB, **expand** the partition to 200MB (or a bit more)
-      * In case the size of it is >500MB, **shrink** the partition to 500MB (or 200MB) because it's a waste of space
-      * In case you have multiple partitions with `EF00`, that means your partitioning is bad, you only really need just 1 EFI partition in the whole system (if not per disk, there is no real need for multiple EFI partitions, makes no sense)
-  * In case your disk doesn't contain an EFI partition:
+    * 你会看到一个描述`(EFI系统分区)`
+    * 这个分区的大小通常在100MB到500MB之间(超过这个值就浪费存储空间了)
+      * 如果它的大小<200MB， **扩展**分区到200MB(或更多一点)
+      * 如果它的大小是>500MB， **收缩**分区到500MB(或200MB)，因为这是浪费空间
+      * 如果你有多个`EF00`分区，这意味着你的分区很糟糕，你实际上只需要在整个系统中只有一个EFI分区(如果不是每个磁盘，实际上没有必要有多个EFI分区，没有意义)
+  * 如果您的磁盘不包含EFI分区:
     ![img](../images/ex-data/gpt_noefi.png)
 
-#### In  Linux
+#### Linux  系统
 
-* Download/Install `gdisk` following you distrubution
+* 根据发行版下载/安装`gdisk`
 
-* Run `lsblk` to check for the destination drive identifiers
+* 运行`lsblk`来检查目标驱动器标识符
 
-* Run `sudo gdisk <identifier>` (eg: `sudo gdisk /dev/sda`)
+* 运行`sudo gdisk <identifier>`(例如:`sudo gdisk /dev/sda`)
 
-* When gdisk starts, send `p`
+* W当gdisk启动时，发送`p`
 
-  * In case your disk already contains an EFI partition: (usually if your disk was already GPT or formatted before)
+  * 如果您的磁盘已经包含一个EFI分区:(通常如果您的磁盘之前已经被GPT或格式化过)
 
     ```sh
     Command (? for help): p
@@ -193,14 +193,14 @@ With that said, we still need to determine if it's required or not:
        ... // Other partitions
     ```
 
-    * You'll find a partition with code `EF00` meaning it's marked as an EFI System Partition
-      * The EFI partition does not need to be the first, it can be anywhere in the disk partitioning order, the `Code` of it is what matters the most
-    * The size of this partition is usually between 100MB and 500MB (any more and it's a waste of storage space)
-      * In case the size of it is <200MB, **expand** the partition to 200MB (or a bit more)
-      * In case the size of it is >500MB, **shrink** the partition to 500MB (or 200MB) because it's a waste of space
-      * In case you have multiple partitions with `EF00`, that means your partitioning is bad, you only really need just 1 EFI partition in the whole system (if not per disk, there is no real need for multiple EFI partitions, makes no sense)
+    * 你会发现一个带有代码`EF00`的分区，这意味着它被标记为EFI系统分区
+      * EFI分区不需要是第一个，它可以在磁盘分区顺序的任何位置，它的`Code`是最重要的
+    * 这个分区的大小通常在100MB到500MB之间(超过这个值就浪费存储空间了)
+      * 如果它的大小小于200MB， **扩展**到200MB(或者更大)
+      * 如果它的大小是>500MB，则**缩小**分区到500MB(或200MB)，因为这是对空间的浪费
+      * 如果你有多个`EF00`分区，这意味着你的分区很糟糕，你实际上只需要在整个系统中只有一个EFI分区(如果不是每个磁盘，实际上没有必要有多个EFI分区，没有意义)
 
-  * In case your disk doesn't contain an EFI partition:
+  * 如果你的磁盘不包含EFI分区:
 
     ```sh
     Command (? for help): p
@@ -219,17 +219,17 @@ With that said, we still need to determine if it's required or not:
        ... // Other partitions that are not EFIs
     ```
 
-    * There are no `EF00` partitions meaning we need to make one
+    * 没有`EF00`分区，这意味着我们需要创建一个
 
-#### In  macOS
+#### macOS  系统
 
-* Run `diskutil list`
+* 运行 `diskutil list`
 
-  * Optionally you can add `diskX` with X as the identifier of the target disk if you don't want a big list of partitions and disks shown up, in most cases the disk numbers change from a system boot to another, so don't rely on it too much.
+  * 你可以选择添加`diskX`， X作为目标磁盘的标识符，如果你不希望显示一个大的分区和磁盘列表，在大多数情况下，磁盘编号从系统启动到另一个，所以不要过度依赖它。
 
-* Check your destination disk listing:
+* 检查你的目标磁盘列表:
 
-  * In case your disk contain an EFI partition:
+  * 如果您的磁盘包含EFI分区:
 
     ```sh
     /dev/diskX (does not matter):
@@ -240,13 +240,13 @@ With that said, we still need to determine if it's required or not:
          ... // Other stuff that aren't TYPE: EFI
     ```
 
-    * We see a partition with `TYPE` as `EFI`, which means a disk with an EFI partition (and as you can see it's 200MB)
-    * The size of this partition is usually between 100MB and 500MB (any more and it's a waste of storage space)
-      * In case the size of it is <200MB, **expand** the partition to 200MB (or a bit more)
-      * In case the size of it is >500MB, **shrink** the partition to 500MB (or 200MB) because it's a waste of space
-      * In case you have multiple partitions with `EF00`, that means your partitioning is bad, you only really need just 1 EFI partition in the whole system (if not per disk, there is no real need for multiple EFI partitions, makes no sense)
+    * 我们看到一个`TYPE`为`EFI`的分区，这意味着一个具有EFI分区的磁盘(如你所见，它是200MB)
+    * 这个分区的大小通常在100MB到500MB之间(超过这个值就浪费存储空间了)
+      * 如果它的大小小于200MB， **扩展**到200MB(或者更大)
+      * 如果它的大小是>500MB，则**缩小**分区到500MB(或200MB)，因为这是对空间的浪费
+      * 如果你有多个`EF00`分区，这意味着你的分区很糟糕，你实际上只需要在整个系统中只有一个EFI分区(如果不是每个磁盘，实际上没有必要有多个EFI分区，没有意义)
 
-  * In case your disk doesn't contain an EFI partition:
+  * 如果你的磁盘不包含EFI分区:
 
     ```sh
     /dev/diskX (does not matter):
@@ -256,160 +256,160 @@ With that said, we still need to determine if it's required or not:
          ... // Other stuff that aren't TYPE: EFI
     ```
 
-    * There are no partitions with `TYPE` as `EFI`, although the disk is GPT, meaning we need to make one.
+    * 虽然磁盘是GPT，但没有`TYPE`为`EFI`的分区，这意味着我们需要创建一个。
 
-### In case you have an EFI partition
+### 如果你有一个EFI分区
 
-Congratulations, you can go ahead and partition your disk for macOS and be on your merry way, check the **Partitioning for macOS** section.
+祝贺你，你可以继续并为macOS划分你的磁盘，并在你的愉快的道路上，检查**macOS分区**部分。
 
-### In case you do not have an EFI partition
+### 如果你没有EFI分区
 
-We'll have to make one, and the OSes that we will use will be either Windows or Linux (macOS is kind of a pain in the ass, not going to bother with it).
+我们必须做一个，我们将使用的操作系统要么是Windows，要么是Linux (macOS是一种麻烦，不打算用它)。
 
-#### In   Windows
+#### Windows  系统
 
-We'll be using a disk managing software named `Minitool Partition Wizard`, ngl, it does look shady af and kind of like malware (and won't be surprised if it is). There are other alternatives like `Easeus Partition Master` (that suspiciously look like MPW 🤔) and `AOMEI Partition Assistant` (that also looks like the other two ***🤔 intensifies***), and many more but these are the most popular windows disk managers.
+我们将使用一个名为`Minitool Partition Wizard`的磁盘管理软件，ngl，它看起来确实阴暗，有点像恶意软件(如果它是，也不会惊讶)。还有其他的替代品，比如`Easeus Partition Master`(看起来很像MPW🤔)和`AOMEI Partition Assistant`(看起来也像另外两个**🤔**)，还有更多，但这些都是最受欢迎的windows磁盘管理器。
 
-##### But where is muh GpArTeD
+##### 但是哪里是GpArTeD
 
-The reason why I'm not recommending Gparted with NTFS partitions is that it might corrupt the partition easier than when Windows deals with it. I personally didn't have to deal much with corrupt NTFS partitions (I did once or twice) and Windows will surely fix them, but a lot of users reported unrecoverable partitions or data from using Gparted, not blaming Gparted, but using Windows with its own FS is safer than hoping ntfs-3g doesn't fuck up, that being said though, I'll post a Gparted guide below under `Linux` section, and if you already dealt with Gparted, I think you might know what to do.
+我不推荐使用NTFS分区的Gparted的原因是它可能比Windows处理它时更容易破坏分区。我个人不需要处理太多损坏的NTFS分区(我做过一次或两次)，Windows肯定会修复它们，但很多用户报告使用Gparted无法恢复分区或数据，不是责怪Gparted，但使用Windows与自己的FS比希望NTFS -3g不搞破坏更安全，话虽如此，我将在“Linux”部分下面发布一个Gparted指南，如果你已经处理过Gparted，我想你可能知道该怎么做。
 
-In this section I'll be using MPW, the other tools are very similar and have very similar menus, you can follow up with them just fine. In this case, I will be using an external disk for the partitioning, it does not change anything about the internal disk, the same procedure goes for any disk.
+在本节中，我将使用MPW，其他工具也非常相似，也有非常相似的菜单，你可以继续使用它们。在这种情况下，我将使用一个外部磁盘进行分区，它不会改变内部磁盘的任何内容，对任何磁盘都是相同的过程。
 
-* Download the ~~malware~~ partition manager of your choice (MPW here)
+* 下载你选择的~~恶意软件~~分区管理器(这里是MPW)
 
-* Install the ~~malware~~ partition manager and **keep an eye on the adware and extra "apps" that they install, Chrome, Opera, some shady AV and so on**
+* 安装~~恶意软件~~分区管理器，并**关注他们安装的广告软件和额外的“应用”，Chrome, Opera，一些可疑的AV等等**
 
-* Run the application as Administrator
+* 以管理员身份运行应用程序
 
-* Right Click on the target disk first partition and shrink it by 200MB (and bit more)
+* 右键单击目标磁盘的第一个分区并将其缩小200MB(甚至更多)
   ![Screenshot 2020-09-15 235910](../images/ex-data/mv-rsz.png)
   ![Screenshot 2020-09-16 000113](../images/ex-data/resizing.png)
 
-  * Note: because of the trashy software, here is how to do it properly:
-    * change the size view from **GB** to **MB**
-    * select the partition size and **press down arrow key** on your keyboard to lower its value
-    * usually the Space After will be filled
-    * once you hit your mark (say 220MB) select the Unallocated Space After section and **press down arrow key**
-    * you'll see the Unallocated Space Before being filled
-  * Note2: Moving the big slider will just create weird numbers and it's trash, so deal with it
-  * Note3: I don't know if other partitioning software are this trash
+  * 注意:因为是垃圾软件，下面是正确的操作方法:
+    * 将尺寸视图从**GB**更改为**MB**
+    * 选择分区大小，**按下键盘上的方向键**降低分区大小
+    * 通常后面的空格会被填满
+    * 当你达到目标(例如220MB)时，选择部分后面未分配的空间并**按下箭头键**
+    * 你会看到未分配空间之前被填充
+  * 注意2:移动大滑块只会产生奇怪的数字，它是垃圾，所以要处理它
+  * 注意3:我不知道其他分区软件是否都是这样的垃圾
 
-* Once done, press apply on wherever the software shows you (in this version it's under the Operation Pending list, older releases had a dedicated button at the top of it, so check carefully the UI as it changes over time)
+* 一旦完成，在软件显示的任何地方按apply(在这个版本中，它在Operation Pending列表下，旧版本的顶部有一个专用按钮，所以要仔细检查UI，因为它会随着时间的推移而变化)
 
   ![Screenshot 2020-09-16 002725](../images/ex-data/applypending.png)
 
-* **THIS PROCESS WILL TAKE TIME DEPENDING ON THE DATA ON YOUR DRIVE AND IF IT'S AN SSD OR A SPINNING RUST (HDD), DO NOT CANCEL IT UNDER ANY CIRCUMSTANCES OTHERWISE YOU'LL KILL YOUR DATA BYE BYE. YOU'VE BEEN WARNED!**
+* **这个过程需要一定的时间，这取决于你的硬盘上的数据，如果是SSD或hdd，在任何情况下都不要取消它，否则你的数据会被销毁。别怪我没提醒你!**
 
-* You now have **empty space before the first partition**, this space will be used to create an EFI partition
+* *现在**第一个分区之前有一个空白的空间**，这个空间将被用来创建一个EFI分区
 
-  * Due to MPW managers being assholes, creating an EFI partition is now a paid feature
-  * If you have an old version (9 or older) you can do that for free
+  * 由于MPW经理是混蛋，创建EFI分区现在是一项付费功能
+  * 如果你有一个旧版本(9或更旧)，你可以免费使用它
 
-* Once the operations are done:
+* 操作完成后:
 
-  * Open CMD/PowerShell with Administrator rights
+  * 以管理员权限打开CMD/PowerShell
 
-  * Run `diskpart`
+  * 运行 `diskpart`
 
-  * Run the following commands:
+  * 执行以下命令:
 
     * `list disk`
 
-      * Will show your disks, check the destination disk carefully
-      * You can check Disk Manager as the disk numbering is the same
+      * 将显示您的磁盘，请仔细检查目标磁盘
+      * 您可以查看磁盘管理器，因为磁盘编号是相同的
 
     * `sel disk X`
 
-      * Where X is your destination disk number
+      * 其中X是目标磁盘号
 
     * `list part`
 
-      * Will list partitions on that selected disk
-      * Check the partitions as it may help you check for the destination
-      * If it's not the desired disk, use `sel disk X` again and choose another one and check again
+      * 将列出所选磁盘上的分区
+      * 检查分区，因为它可以帮助你检查目标
+      * 如果不是想要的磁盘，再次使用`sel disk X`并选择另一个并再次检查
 
     * `create partition efi`
 
-      * Will create a new partition of EFI type
-      * This will make it hidden on the system and can only be explored with administrator privileges
-      * It will take up the whole free space we made earlier
+      * 将创建一个EFI类型的新分区
+      * 这将使它隐藏在系统中，只有管理员权限才能探索
+      * 它会占据我们之前创建的所有空闲空间
 
     * `list part`
 
-      * You'll see a new partition with Type `System`
-      * The size should roughly match the one we left earlier
+      * 你会看到一个类型为`System`的新分区
+      * 大小应该大致匹配我们之前离开的那个
 
     * `format fs=fat32 label="EFI"`
 
-      * this will format that partition as FAT32 and give it the label "EFI"
-      * Note: **in some cases** windows will return an error that `The device is not ready`, I'm not sure what could that be but we can fix it
-      * Fix of Note:
-        * Go back to MPW
-        * Right click on the EFI partition (should be also detected as `EFI System Partition`) and select **Format**
+      * 这将格式化该分区为FAT32并赋予它“EFI”标签
+      * 注意:**在某些情况下**，windows会返回一个“设备还没有准备好”的错误，我不知道这是什么，但我们可以解决它
+      * 修正注意事项:
+        * 回到MPW
+        * 右键点击EFI分区(应该也被检测为“EFI系统分区”)，选择**Format**
         * ![Screenshot 2020-09-16 002834](../images/ex-data/FormatEFI.png)
-        * Press OK and be done with it.
+        * 按OK键完成。
 
-    * Example of the output:
+    * 输出示例:
 
       ![Screenshot 2020-09-16 002720](../images/ex-data/diskpart_output.png)
 
-* Once done you can go to **Partitioning for macOS**
+* 一旦完成，您可以为macOS**进行**分区
 
-#### In Linux (my favourite)
+#### 在Linux中(我的最爱)
 
-We'll be using your favorite tool Gparted, if you're using parted/gpart, you're looking for a sad day. Let's get going.
+我们将使用您最喜欢的工具Gparted，如果您正在使用parted/gpart，您正在寻找悲伤的一天。我们出发吧。
 
-* Install `gparted` following your distribution instructions (or use GParted ISO)
+* 按照发行版说明安装`gparted`(或者使用gparted ISO)
 
-* Run `gparted`
+* 运行 `gparted`
 
-* Select the destination disk from the list on the right
+* 在右侧列表中选择目标磁盘
 
   ![image-20200917014041409](../images/ex-data/gparted_list_disk.png)
 
-* Right click on the first partition then select **Resize/Move**
+* 右键单击第一个分区，然后选择 **Resize/Move**
 
   ![image-20200917014201474](../images/ex-data/resize_gparted.png)
 
-* Select the Free space preceding text zone and press **up arrow key** until you get to the desired size then hit Resize/Move
+* 选择文本区域之前的空闲空间，并按**向上箭头键**，直到你达到所需的大小，然后点击 Resize/Move
 
   ![image-20200917014513781](../images/ex-data/resize_menu_gp.png)
 
-  * Note that if you went over the desired size then subtracted the extra amount, it **will be moved to the free space following** the partition, in this case just press `+` on the New size area until the space following zeros out, going for even more will decrease the free space preceding (logic, right? just don't mess up too much, thanks)
+  * 请注意，如果超过所需的大小，然后减去额外的数量，它**将被移动到分区后面的空闲空间**，在这种情况下，只需在新大小区域上按`+`，直到后面的空间为零，继续增加更多将减少前面的空闲空间(逻辑，对吧?别搞得太乱，谢谢)
 
-* You'll get this error, press OK, this matters if you have multiple partitions but usually most modern OSes (on UEFI) are quite resilient to this issue (by using UUIDs instead of partition numbering)
+* 您将得到这个错误，按OK，如果您有多个分区，这很重要，但通常大多数现代操作系统(在UEFI上)对这个问题很有弹性(通过使用uuid而不是分区编号)
 
   ![image-20200917014846172](../images/ex-data/gp_warning.png)
 
-* Right click on the unallocated partition and select New
+* 右键单击未分配的分区并选择 New
   ![image-20200917015144211](../images/ex-data/new_part_gp.png)
 
-* In the *Create new Partition* box, set the following then press Add
+* 在 *Create new Partition* 框中，设置以下内容，然后按 Add
 
-  * Partition name (could be named EFI, it doesn't matter)
-  * Label (could be named EFI, it doesn't matter)
+  * Partition name (分区名(可以命名为EFI，没有关系))
+  * Label (标签(可以叫EFI,没关系))
   * File system: **FAT32**
   * ![image-20200917015338264](../images/ex-data/new_part_efi_gp.png)
 
-* Press the green check mark on the toolbar to Apply Changes and confirm them
+* 按下工具栏上的绿色复选标记应用更改并确认
   ![Screen Shot 2020-09-17 at 01.54.56](../images/ex-data/apply_changes_gp.png)
   ![image-20200917015813671](../images/ex-data/confirm_apply.png)
 
-* **THIS PROCESS WILL TAKE TIME DEPENDING ON THE DATA ON YOUR DRIVE AND IF IT'S AN SSD OR A SPINNING RUST (HDD), DO NOT CANCEL IT UNDER ANY CIRCUMSTANCES OTHERWISE YOU'LL KILL YOUR DATA BYE BYE. YOU'VE BEEN WARNED!**
+* **这个过程需要一定的时间，这取决于你的硬盘上的数据，如果是SSD或硬盘，在任何情况下都不要取消它，否则你的数据会被毁掉。别怪我没提醒你!**
   ![image-20200917020004696](../images/ex-data/gp_progress.png)
 
-* Once done, right click on your newly created EFI partition and select "Manage Flags"
+* 完成后，右键单击新创建的EFI分区并选择“Manage Flags”
   ![image-20200917020200810](../images/ex-data/mng_flags.png)
 
-* Select `esp`, gparted will select `boot` automatically, keep it that way
+* 选择`esp`， gparted将自动选择`boot`，保持这个状态
 
   ![image-20200917020305683](../images/ex-data/flags.png)
 
-* It will be done instantly, check your flags
+* 它会立即完成，检查你的标志
   ![image-20200917020438739](../images/ex-data/flags_check.png)
 
-  * You can also check in `gdisk` for `EF00`
+  * 你也可以在`gdisk`中查看`EF00`
 
-* Once done you can go to **Partitioning for macOS**
+* 一旦完成，你可以进入**macOS分区**
   

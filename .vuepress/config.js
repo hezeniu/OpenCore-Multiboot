@@ -121,15 +121,15 @@ module.exports = {
                     sidebarDepth: 1,
                     children: [
                         ['/empty/samedisk', '一个磁盘-多个操作系统'],
-                        ['/empty/diffdisk', '多个磁盘—多个操作系统'],
+                        ['/empty/diffdisk', '多个磁盘-多个操作系统'],
                     ]
                 },
-                ['/exist/', '已充满磁盘'],
+                ['/exist/', '已充满数据的磁盘'],
                 {
                     collapsable: false,
                     sidebarDepth: 1,
                     children: [
-                        ['/exist/data', '在已填满的非操作系统相关磁盘(数据磁盘)上'],
+                        ['/exist/data', '在已充满数据的非操作系统相关磁盘(数据磁盘)上'],
                         ['/exist/os', '在一个充满操作系统相关的磁盘上(Windows/Linux)'],
                     ]
                 },
