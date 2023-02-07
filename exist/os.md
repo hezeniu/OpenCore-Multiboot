@@ -1,3 +1,3 @@
-# On a filled OS related disk (Windows/Linux)
+# 在一个充满操作系统相关的磁盘上(Windows/Linux)
 
-**Work in Progess**, you can help contibute via [PRs](https://github.com/dortania/OpenCore-Multiboot/pulls)
+**工作正在进行**, 您可以通过[PRs](https://github.com/dortania/OpenCore-Multiboot/pulls)提供帮助。
