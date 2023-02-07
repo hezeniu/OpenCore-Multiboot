@@ -1,116 +1,116 @@
 
-# UEFI Systems
+# UEFI 系统
 
-Ever since UEFI, the disk default partition map format is GPT (GUID Partition Table), which added support for more than 2TB of disk size and more than 4 partitions that was the limit of MBR while still keeping a backward compatibility with MBR for legacy systems. If your computer (prebuilt) came with Windows 8 (2012 and later), then your disk is probably partitioned as GPT.
+自UEFI以来，磁盘默认的分区映射格式是GPT (GUID分区表)，它增加了对超过2TB的磁盘大小和超过4个分区的支持，这是MBR的限制，同时仍然对遗留系统的MBR保持向后兼容。如果你的电脑(预装的)安装了Windows 8(2012年及以后的版本)，那么你的磁盘很可能是GPT分区的。
 
-Usually, 2012+ computers that came with Windows 8 would have a UEFI firmware (some OEMs released Windows 7 releases alongside those, so make sure yours has UEFI), and this is a newly spread firmware type (that was in development since the 2000s) and was already deployed on Apple computers ever since the intel switch (but their own heavily modified firmware, it's called EFI and not UEFI for the lack of universality). This new firmware has some new features like Secure Boot, help with faster booting, hardware passthrough, graphical interface with mouse support (and more). To know more about UEFI and Secure Boot check this writeup by Osy86 [here](https://osy.gitbook.io/hac-mini-guide/details/secure-boot). Basically, a UEFI boot goes something like this:
+通常，安装了Windows 8的2012+电脑会有一个UEFI固件(一些oem也发布了Windows 7版本，所以请确保你的电脑也有UEFI)，这是一个新传播的固件类型(从2000年开始开发)，自从英特尔切换后就已经部署在苹果电脑上了(但他们自己大量修改的固件，称为EFI，而不是UEFI，因为缺乏通用性)。这个新固件有一些新功能，如安全引导，帮助更快的引导，硬件直通，图形界面与鼠标支持(以及更多)。要了解更多关于UEFI和安全启动的信息，请查看Osy86撰写的[此处](https://osy.gitbook.io/hac-mini-guide/details/secure-boot). 基本上，一个UEFI引导是这样的:
 
-* UEFI Firmware loads up
-* Loads its integrated drivers and services
-* Reads the boot menu entries and start loading the first boot entry
-  * If failed starts the next one
-* Loads the bootloader
-  * OS is loaded after that.
+* UEFI固件加载完成
+* 加载其集成的驱动程序和服务
+* 读取引导菜单条目并开始加载第一个引导条目
+  * 如果失败，启动下一个
+* 加载引导装载程序
+  * OS在此之后加载。
 
-Usually, the said "bootloader" is contained somewhere in the disk, and that somewhere is called a **EFI Partition**. You can find this named different things like ESP (EFI System Partition), SYSTEM, EFI, BOOT and so on. This partition is **FAT32** formatted and flagged as **EF00** in MBR or **C12A7328-F81F-11D2-BA4B-00A0C93EC93B** GUID in GPT. This partition contains usually the EFI applications (like an OS bootloader) in it that are loaded at boot by the UEFI firmware (remember this as it is important for later for recovery).
+通常，所述的“引导加载程序”包含在磁盘中的某个地方，这个地方被称为**EFI分区**。你可以找到不同的东西，如ESP (EFI系统分区)，System, EFI, BOOT等。该分区被**FAT32**格式化并标记为MBR中的**EF00**或GPT中的**C12A7328-F81F-11D2-BA4B-00A0C93EC93B** GUID。这个分区通常包含由UEFI固件在启动时加载的EFI应用程序(如操作系统引导加载程序)(请记住这一点，因为这对以后的恢复很重要)。
 
-# Legacy/CSM Systems
+# Legacy/CSM 系统
 
-Contrary to UEFI, Legacy systems are older and much more mature (dating back to the first IBM PCs). They're certainly a lot more limited and slower than UEFI on the same system but hold better compatibility with a lot of OSes (even macOS in some rare cases). Computer pre-2012 usually have this type of firmware (some exceptions like servers and some professional laptops and so on that can also have UEFI, they're not reliable thought in that mode). The computer would usually come with a version of Windows that is older than Windows 8 with a hard drive that is less than 2TB. Some desktop users at this time would also install OSes in Legacy mode even if their motherboard supports the newer UEFI standard. This could create issues with multibooting later on.
+与UEFI相反，Legacy系统更老，也更成熟(可以追溯到第一代IBM pc)。在相同的系统上，它们肯定比UEFI有更多的限制和更慢的速度，但与许多操作系统(甚至在极少数情况下是macOS)具有更好的兼容性。2012年以前的电脑通常都有这种类型的固件(有些例外，比如服务器和一些专业的笔记本电脑等等，它们也可能有UEFI，在那种模式下它们是不可靠的)。电脑通常会安装比Windows 8更旧的Windows版本，硬盘容量小于2TB。一些桌面用户此时也会在Legacy模式下安装操作系统，即使他们的主板支持较新的UEFI标准。这可能会在以后的多引导中产生问题。
 
-These systems rely on another method of loading the bootloader. This piece of software is usually written in the first sectors of the disk (formatted as MBR) called **boot sector**, this sector is usually 512 or 4096 bytes big, the BIOS would then read the code, copy it to memory and then execute it, at that point an OS or Bootloader menu (like GRUB2) will show up:
+这些系统依赖于加载引导装载程序的另一种方法。这个软件通常写在磁盘的第一个扇区(格式化为MBR)，称为**引导扇区**，这个扇区通常有512或4096字节大，BIOS将读取代码，将其复制到内存中，然后执行它，这时一个操作系统或引导加载程序菜单(如GRUB2)将显示:
 
-* BIOS Starts up
-* Reads the **boot sector**
-* Loads the program into memory
-* Executes the program
-* Bootloader appears
-  * The OS will boot now.
+* BIOS启动
+* 读取**引导扇区**
+* 将程序加载到内存中
+* 执行程序
+* 出现引导加载程序
+  * 操作系统现在开始启动。
 
-# Major differences between the systems
+# 系统之间的主要区别
 
-We'll put them in a table to show the main differences:
+我们将把它们放在一个表中，以显示主要的区别:
 
 |                                                            | **UEFI**                                                     | **Legacy**                                                   |
 | ---------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Fast Boot                                                  | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| Bootloader Chooser through the boot menu                   | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| Secure Boot                                                | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| Add a bootloader without overwriting the others            | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| Supporting 2TB+ boot disks                                 | ✅ (hardware dependent)                                       | ❌ (requires GPT, which is supported on some Legacy systems, 2006+) |
-| Legacy Hardware Support                                    | ⚠️ (depends on which hardware, CSM switch should be possible) | ✅ (hardware dependent)                                       |
-| Easier maintenance (managing bootloaders and boot entries) | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| OS Support                                                 | ✅                                                            | ✅                                                            |
+| 快速启动                                                  | ✅ (在大多数情况下)                                                  | ❌ (只有一些做到了，没有一个标准)                             |
+| 引导加载程序通过引导菜单选择                   | ✅ (在大多数情况下)                                                  | ❌ (只有一些做到了，没有一个标准)                             |
+| 安全启动                                                | ✅ (在大多数情况下)                                                  | ❌ (只有一些做到了，没有一个标准)                             |
+| 在不覆盖其他引导加载程序的情况下添加引导加载程序            | ✅ (在大多数情况下)                                                  | ❌ (只有一些做到了，没有一个标准)                             |
+| 支持2TB+启动盘                                 | ✅ (依赖硬件)                                       | ❌ (需要GPT，它在一些遗留系统上支持，2006+) |
+| 传统硬件支持                                    | ⚠️ (取决于哪个硬件，CSM开关应该是可能的) | ✅ (取决于硬件)                                       |
+| 更容易维护(管理引导加载程序和引导条目) | ✅ (在大多数情况下)                                                  | ❌ (只有一些做到了，没有一个标准)                             |
+| OS 支持                                                 | ✅                                                            | ✅                                                            |
 
-Aside from Legacy hardware support (which is rare anyways nowadays), UEFI is the firmware to use when dual booting on newer hardware (2012+). But for legacy users, there is also a way to get some UEFI features but only through DUET (will be later discussed).
+除了传统硬件支持(现在很少了)，UEFI是在新硬件上双引导时使用的固件(2012+)。但是对于传统用户，也有一种方法可以获得一些UEFI特性，但只能通过DUET(稍后将讨论)。
 
-# Detecting which firmware you're using
+# 检测你正在使用的固件
 
-## No OS
+## 没有操作系统
 
-If your computer:
+如果你的电脑:
 
-* is from Ivy Bridge era (~2012) and later
-* has a Windows 8 Sticker
+* 来自 Ivy Bridge 时代(~2012年)及之后
+* 有一个Windows 8贴纸
 
-Then it probably has **UEFI system**, that said, it doesn't mean older generation motherboards do not, however with Windows 8 release, Microsoft standardized the UEFI specs for OEMs to get their certification (usually if you go with brand names like ASUS, Lenovo, HP, Dell... you're good to go).
+那么它可能有**UEFI系统**，也就是说，这并不意味着老一代的主板没有，然而随着Windows 8的发布，微软标准化了UEFI规范，以供oem获得认证(通常如果你选择品牌名称，如华硕，联想，惠普，戴尔…你可以开始了)。
 
-Any older than the above and the chances of having a proper UEFI implementation diminishes and you're better off with a Legacy booting.
+如果比上面的版本更老，那么拥有合适的UEFI实现的机会就会减少，最好使用Legacy引导。
 
-## On Windows
+## 在Windows上
 
-Open Run (Win + R) and type `msinfo32`, you will be greeted with this window:
+打开运行(Win + R)，输入`msinfo32`，你将看到如下窗口:
 
 ![MSINFO32 Window](../images/msinfo.png)
 
-Check **BIOS Mode**, it will either say **UEFI** or **Legacy**. Note that this is for Windows 8/10, if you're using Windows 7 or older, you're probably running it in Legacy mode.
+检查**BIOS Mode**，它会显示为**UEFI**或**Legacy**。请注意，这是针对Windows 8/10的，如果你使用的是Windows 7或更旧的版本，可能是在Legacy模式下运行。
 
-## On Linux
+## 在Linux上
 
-### Method 1
+### 方法 1
 
-On most Linux distributions, you can run
+在大多数情况下Linux发行版，可以运行
 
 ```ls /sys/firmware/efi```
 
 ![img](../images/linuxefivar.png)
 
-If the folder exists, then you're running in UEFI mode. (screenshot credit: Scooby-Chan#7971)
+如果文件夹存在，那么你正在UEFI模式下运行 (截图来源: Scooby-Chan#7971)
 
-### Method 2
+### 方法 2
 
-You can also download and run `efibootmgr` (available on most distributions) and you will either:
+你也可以下载并运行`efibootmgr`(可在在大多数情况下发行版下载)，你可以:
 
-* Get boot entries variables
-  * Your system is running UEFI
-* or get an error message that EFI variables aren't supported
-  * Your system is running in Legacy mode
-
----
-
-# macOS in all of this
-
-macOS requires some special treatment because Apple wants to (pampering their OS), and thus requires a set of rules to get it installed on any drive:
-
-* GPT formatted disk
-* EFI partition of at least 200MB
-
-With these two requirements in mind, you can theoretically just make them happen and you're good to go. If you understood what to do from these requirements and can do it on your own, you're good to go, if not, stay here to get more tips and tricks on how to properly fix this.
+* 获取引导条目变量
+  * 你的系统正在运行UEFI
+* 或者得到一条不支持EFI变量的错误消息
+  * 你的系统运行在Legacy模式下
 
 ---
 
-Next sections:
+# macOS在所有这些中
 
-Cases:
+macOS需要一些特殊处理，因为苹果公司想要(纵容他们的操作系统)，因此需要一套规则来让它安装到任何驱动器上:
 
-* No OS installed on the machine:
-  * DB on same disk
-  * DB on different disks
-* Already installed OS or existing data in the drive
-  * Systems with native UEFI support: convert your legacy booting OS to a UEFI one
+* GPT格式的磁盘
+* EFI分区至少200MB
+
+考虑到这两个要求，理论上你可以让它们实现，然后就可以了。如果您理解了这些需求中的操作，并且可以自己完成，那么您就可以开始了，如果没有，请留在这里获取有关如何正确解决此问题的更多提示和技巧。
+
+---
+
+接下来的部分:
+
+例:
+
+* 未安装操作系统:
+  * 数据库在同一个磁盘上
+  * 数据库在不同的磁盘上
+* 已经安装的操作系统或驱动器中现有的数据
+  * 支持原生UEFI的系统:将你的旧引导操作系统转换为UEFI
     * Linux
     * Windows
-    * Systems with only Legacy booting only option:
+    * 系统只有Legacy启动选项:
       * DUET
 
-Good luck, and ***BACKUP YOUR DATA***.
+祝你好运，并**备份你的数据**。

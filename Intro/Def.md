@@ -1,23 +1,23 @@
 
-# What is multibooting
+# 什么是多重引导
 
-Multibooting is the process of having multiple OSes booting off the same device and physically present on that device. You might say "well duh!" but some people do not know that you can only boot **one OS** at a time. Contrary to virtualisation, multibooting does *NOT* load all OSes at the same time but you turn off one to get to the other. Multibooting can be on any machine, whether it's a virtual one or a real one, as long as the firmware is able to boot either of the OSes, it's good.
+多引导是指让多个操作系统从同一设备上启动并在该设备上实际存在的过程。你可能会说“好吧，废话!”但有些人不知道你一次只能启动一个操作系统。与虚拟化相反，多引导**不会**同时加载所有操作系统，但你可以关闭一个操作系统来访问另一个。多引导可以在任何机器上进行，无论是虚拟的还是真实的，只要固件能够引导任一操作系统，就很好。
 
-Here is how we can see Multiboot vs Virtualisation:
+下面是我们如何看待多引导和虚拟化:
 
-![Left Multibooting  |  Right Virtualisation](../images/mbvm.png)
+![左多引导  |  右虚拟化](../images/mbvm.png)
 
-Now that you made the difference, there are thing you need to know about dualbooting, mainly:
+现在你已经做出了改变，关于双启动，你需要知道一些事情，主要是:
 
-- Disk partitioning
-- Bootloader location
-  - Legacy
-  - UEFI
-- Bootloader selection
-  - Legacy
-  - UEFI
-- Configuration of the bootloader
+* 磁盘分区
+* 引导加载程序位置
+  * Legacy
+  * UEFI
+* 引导加载程序选择
+  * Legacy
+  * UEFI
+* 引导加载器配置
 
-But before starting any of this
+但在开始之前
 
-# PLEASE BACKUP YOUR DATA
+# 请备份你的数据
