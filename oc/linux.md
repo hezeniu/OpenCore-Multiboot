@@ -213,7 +213,7 @@ Misc -> BlessOverride -> \EFI\arch\grubx64.efi
         * 在执行任何操作之前，请确保正确地读取了分区位置
       * FS0/BLK2/BLK9都位于SATA驱动器中(这是我这个示例设备的主引导驱动器)
         * 这将匹配linux将设备读取为`sdX`而不是`nvmeXnX`
-        * 在NVMe驱动的情况下，你看到的是` NVMe `而不是`Sata`
+        * 在NVMe驱动的情况下，你看到的是`NVMe`而不是`Sata`
       * BLK9的PARTUUID匹配我的根文件系统`a1073e53-c768-4ce5-89ad-b558669bdb89`
         * 但是记住它是大写的!
       * BLK1和BLK2有它们可探索的`FSX`，这意味着UEFI固件可以从它们中探索和读取文件，然而BLK9是一个ext4分区，这意味着UEFI需要一个合适的驱动程序来加载其内容。
