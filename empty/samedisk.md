@@ -1,57 +1,57 @@
-# Dualbooting on the same disk
+# 在同一个磁盘上进行双启动
 
-Basically, you only have one empty disk and you want to install multiple OSes to it, it *does not matter if there are other disks*, as this section will only take care of one disk.
+基本上，你只有一个空磁盘，并且你想要在其中安装多个操作系统，**如果有其他磁盘也没关系**，因为本节只会关注一个磁盘。
 
-## Precautions
+## 预防措施
 
-* BACKUP YOUR DATA
-* If possible, disconnect or disable any other disk/drive in your system, as it may interfere with the install procedure (especially windows')
-* The drive isn't corrupted or have bad sectors
-* Stable power input
+* 备份您的数据
+* 如果可能，断开或禁用系统中的任何其他磁盘/驱动器，因为它可能会干扰安装过程(特别是windows的)
+* 驱动器没有损坏或坏扇区
+* 电源输入稳定
 
-## Situation this applies for
+## 这种情况适用
 
-* You already have macOS installed
-* You have an empty disk with no OS installed
+* 你已经安装了macOS
+* 你有一个没有安装操作系统的空磁盘
 
 ---
 
-To start, it is recommended to install the OSes on an empty drive with this order (although it will be noted later that it doesn't matter):
+首先，建议按照这个顺序将操作系统安装在一个空的驱动器上(虽然后面会注意到这无关紧要):
 
 1. macOS
-2. Any other OS
+2. 其他操作系统
 
-and make sure to:
+并确保:
 
-1. Format the disk with macOS disk utility
-2. NOT to format the second partitions with MSDOS
-3. Have an OpenCore USB disk with you
+1. 使用macOS磁盘实用程序格式化磁盘
+2. 不要用MSDOS格式化第二个分区
+3. 你有一个OpenCore u盘
 
-Here is how it goes:
+事情是这样的:
 
-### While installing macOS
+### 安装macOS时
 
-1. Format your whole disk to GPT, this will ensure that macOS installer will create the necessary 200MB EFI partition that macOS requires (otherwise, APFS/HFS will not format the partition)
+1. 将整个磁盘格式化为GPT，这将确保macOS安装程序将创建macOS所需的必要的200MB EFI分区(否则，APFS/HFS将不会格式化分区)。
    ![Disk Utility in macOS Installer, select View > All Drives](../images/disku1.png)
-2. Once done, select "Partition", press "**+**" and choose the size of the other partition(s), "Format" MUST be `Mac OS Extended` or `APFS` (otherwise, macOS will convert the drive to hMBR which will break Windows installation).
+2. 完成后，选择“分区”，按“**+**”并选择其他分区的大小，“格式”必须是“Mac OS Extended”或“APFS”(否则，macOS将把驱动器转换为hMBR，这会破坏Windows安装)。
    ![You can add as many partitions as you like, **Remember their sizes**](../images/disku2.png)
-3. Hit Apply and let it do its thing:
-   * NOTE: on some macOS releases/setups, the disk utility may suddenly crash and send you back to the main menu, DO NOT PANIC (~~that sure helps~~), just wait for a minute or two then open disk utility back and check if the formatting is done.
-4. Once done, you can install macOS on the partition of your choosing and continue along.
+3. 点击应用，让它做它自己的事情:
+   * 注意:在某些macOS版本/设置上，磁盘实用程序可能会突然崩溃，并让你回到主菜单，不要惊慌(~~这肯定有帮助~~)，只是等待一两分钟，然后打开磁盘实用程序，检查是否完成格式化。
+4. 完成后，你可以在你选择的分区上安装macOS并继续。
 
-#### Note
+#### 注意
 
-* You can still do the above if you have macOS already installed, do NOT use bootcamp assistant.
-  * BootCamp assistant will add extra drivers to the Windows installer that we do not need.
+* 如果你已经安装了macOS，你仍然可以执行上述操作，但不要使用bootcamp assistant。
+  * BootCamp assistant将为Windows安装程序添加我们不需要的额外驱动程序。
 
-### For the others
+### 对于其他人
 
 #### Windows
 
-Windows can be a bit of a bitch when it comes to installing it as a second OS (like some kind of insult or just Microsoft doesn't realize that there are other OSes than Windows /s). Create your windows installer (on another computer with the windows creation disk utility or [Rufus](https://rufus.ie))
+当它被安装为第二个操作系统时，Windows可能有点烦人(就像某种侮辱，或者只是微软没有意识到除了Windows /s之外还有其他操作系统)。创建windows安装程序(在另一台计算机上使用windows创建磁盘工具或[Rufus](https://rufus.ie))
 
-In case Windows has any issues while installing, boot back to the installer, remove the MSR/Recovery/Windows partitions that the installer made (there may be more, make sure you do not delete macOS or other OSes partitions), and follow [this guide over at TenForums](https://www.tenforums.com/tutorials/84331-apply-windows-image-using-dism-instead-clean-install.html) on how to install windows manually using the `dism` tool.
+如果Windows在安装过程中出现任何问题，请引导回安装程序，删除安装程序所创建的MSR/Recovery/Windows分区(可能有更多，请确保您没有删除macOS或其他操作系统分区)，并遵循[TenForums](https://www.tenforums.com/tutorials/84331-apply-windows-image-using-dism-instead-clean-install.html) 关于如何使用`dism`工具手动安装Windows的指南。
 
 #### Linux
 
-Linux can be straightforward, unlike Windows. Popular linux distros allow custom disk partitioning, just format the blank partition to EXT4 (or whatever other FS you prefer) and make sure you choose the same EFI partition for where the bootloader will be installed (this should NOT "delete" OpenCore in any shape or form) and install. Other distros (like Arch) would do that manually anyway, just follow the standard procedure from the beginner guide (without formatting the EFI, because it's already formatted to FAT32) and follow through. Personally, I would recommend not to install other bootloaders (like systemd-boot or grub) for the likes of arch because OpenCore can boot linux kernels that have EFISTUB support, if you do however like using a separate bootloader, you can have it your way, it doesn't change anything.
+与Windows不同，Linux可以很简单。流行的linux发行版允许自定义磁盘分区，只需将空白分区格式化为EXT4(或您喜欢的任何其他FS)，并确保选择相同的EFI分区用于安装引导加载程序(这不应该“删除”任何形式的OpenCore)和安装。其他发行版(如Arch)无论如何都会手动执行此操作，只需遵循初学者指南中的标准过程(无需格式化EFI，因为它已经格式化为FAT32)并继续执行。就个人而言，我建议不要为arch安装其他引导加载程序(如systemd-boot或grub)，因为OpenCore可以引导具有EFISTUB支持的linux内核，如果您喜欢使用单独的引导加载程序，则可以按您的方式进行，它不会改变任何东西。

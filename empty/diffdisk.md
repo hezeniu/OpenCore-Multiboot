@@ -1,18 +1,18 @@
-# Dualbooting on different disks
+# 在不同磁盘上进行双引导
 
-I will not get too long in this part as it's the EASIEST one:
+我不会在这部分花太多时间，因为这是最简单的部分:
 
-* Install macOS on one of the disks
-* Install $(SECONDOS) on the other disk
-* Install/copy OpenCore on the macOS disk EFI
-* You're good to go
+* 在其中一个磁盘上安装macOS
+* 在另一个磁盘上安装其他操作系统
+* 在macOS磁盘EFI上安装/拷贝OpenCore
+* 你可以出发了
 
-Things to keep in mind:
+需要记住的事情:
 
-* Windows can be a bitch when it comes to multidisk setups (it freaks out when it sees a lot of EFI partitions on a lot of disks)
-* If the above happens, disable/disconnect all the other disks and install windows as you would normally do
-  * For laptops this can be a pain, you can install windows manually by following [this guide from TenForums](https://www.tenforums.com/tutorials/84331-apply-windows-image-using-dism-instead-clean-install.html)
-  * Make sure you choose the proper disk
-* You can still refer to other situations if you want to dualboot more than one OS on one of the disks.
-* Make sure that OpenCore is on the same disk of macOS for easier troubleshooting and cleaner setup
+* 当涉及到多磁盘设置时，Windows可能是一个贱人(当它看到大量磁盘上的大量EFI分区时，它会崩溃)
+* 如果发生上述情况，请禁用/断开所有其他磁盘并像往常一样安装windows
+  * 对于笔记本电脑来说，这可能是一种痛苦，你可以按照[来自TenForums的指南](https://www.tenforums.com/tutorials/84331-apply-windows-image-using-dism-instead-clean-install.html)手动安装windows
+  * 确保你选择了合适的磁盘
+* 如果你想在一个磁盘上启动多个操作系统，你仍然可以参考其他情况。
+* 确保OpenCore在macOS的同一个磁盘上，以便于更容易的故障排除和更清晰的设置
   

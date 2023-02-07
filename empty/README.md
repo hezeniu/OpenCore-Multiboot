@@ -1,5 +1,5 @@
-# Dualbooting on empty drive(s)
+# 在空驱动器上进行双引导
 
-This section will show you the tips and tricks of installing different OSes on empty drive(s) like on a newly built desktop or a FreeDOS laptop. It will contain information on the install order and technicalities of dualbooting. This is not limited to macOS only, it can be also helpful for multibooting other OSes with each other.
+本节将向您展示在空驱动器上安装不同操作系统的技巧，如在新构建的台式机或FreeDOS笔记本电脑上。它将包含关于安装顺序和双启动技术的信息。这不仅限于macOS，它也可以帮助多个操作系统相互引导。
 
-Let's get started...
+让我们开始吧……
